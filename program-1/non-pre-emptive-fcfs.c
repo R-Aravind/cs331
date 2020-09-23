@@ -23,34 +23,32 @@ typedef struct Process
     int completion_time;
     int turnaround_time;
     int waiting_time;
+
 } Process;
+
+Process arr[MAXN_PROCESSES];
+int avg_turnaround_time, avg_waiting_time;
 
 int main(void)
 {
     int n_process;
-    Process arr[MAXN_PROCESSES];
-    printf("enter no of processes: ");
+    printf("\nenter no of processes: ");
     scanf("%d", &n_process);
 
-    system("cls");
+    printf("enter arrival time and burst time:");
+    printf("\n\npid arrival_time burst_time\n");
 
     for (int i = 0; i < n_process; i++)
     {
         arr[i].pid = i;
-        printf("\n pid: %d", i);
-        printf("\n enter arrival time: ");
-        scanf("%d", &arr[i].arrival_time);
-        printf(" enter burst time: ");
-        scanf("%d", &arr[i].burst_time);
-        system("cls");
+        printf("%d ", i);
+        scanf("%d %d", &arr[i].arrival_time, &arr[i].burst_time);
     }
 
-    for (int i = 0; i < n_process; i++)
-    {
-        printf("\n pid: %d", i);
-        printf("\n arrival time: %d", arr[i].arrival_time);
-        printf("\n burst time: %d\n", arr[i].burst_time);
-    }
+    // TODO: fcfs algorithm
+    // TODO: compute averages
 
+    printf("\naverage turnaround time: %d", avg_turnaround_time);
+    printf("\naverage waiting time: %d", avg_waiting_time);
     return 0;
 }
