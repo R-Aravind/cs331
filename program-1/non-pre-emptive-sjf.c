@@ -23,15 +23,22 @@ typedef struct Process
     int completion_time;
     int turnaround_time;
     int waiting_time;
+    bool is_completed;
 
 } Process;
 
 Process arr[MAXN_PROCESSES];
-int avg_turnaround_time, avg_waiting_time;
+int n_process;
+float avg_turnaround_time, avg_waiting_time;
+
+void sjf();
+void computeAverages();
+void sort();
+void swap(Process *x, Process *y);
 
 int main(void)
 {
-    int n_process;
+
     printf("\nenter no of processes: ");
     scanf("%d", &n_process);
 
@@ -43,12 +50,59 @@ int main(void)
         arr[i].pid = i;
         printf("%d ", i);
         scanf("%d %d", &arr[i].arrival_time, &arr[i].burst_time);
+        arr[i].is_completed = false;
     }
 
-    // TODO: sjf algorithm
-    // TODO: compute averages
+    sjf();
+    computeAverages();
 
-    printf("\naverage turnaround time: %d", avg_turnaround_time);
-    printf("\naverage waiting time: %d", avg_waiting_time);
+    printf("\naverage turnaround time: %0.2f", avg_turnaround_time);
+    printf("\naverage waiting time: %0.2f", avg_waiting_time);
     return 0;
+}
+
+void sjf()
+{
+    sort();
+
+    // TODO
+
+    int prev_completion = 0;
+    for (int i = 0; i < n_process; i++)
+    {
+        arr[i].turnaround_time = arr[i].completion_time - arr[i].arrival_time;
+        arr[i].waiting_time = arr[i].turnaround_time - arr[i].burst_time;
+
+        prev_completion = arr[i].completion_time;
+    }
+}
+
+void computeAverages()
+{
+    for (int i = 0; i < n_process; i++)
+    {
+        avg_turnaround_time += arr[i].turnaround_time;
+        avg_waiting_time += arr[i].waiting_time;
+    }
+    avg_turnaround_time /= n_process;
+    avg_waiting_time /= n_process;
+}
+
+void sort()
+{
+    for (int i = 0; i < n_process - 1; i++)
+        for (int j = 0; j < n_process - i - 1; j++)
+        {
+            if (arr[j].arrival_time > arr[j + 1].arrival_time)
+            {
+                swap(&arr[j], &arr[j + 1]);
+            }
+        }
+}
+
+void swap(Process *x, Process *y)
+{
+    Process temp = *x;
+    *x = *y;
+    *y = temp;
 }
