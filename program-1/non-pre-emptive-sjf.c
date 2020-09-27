@@ -23,7 +23,6 @@ typedef struct Process
     int completion_time;
     int turnaround_time;
     int waiting_time;
-    bool is_completed;
 
 } Process;
 
@@ -50,7 +49,6 @@ int main(void)
         arr[i].pid = i;
         printf("%d ", i);
         scanf("%d %d", &arr[i].arrival_time, &arr[i].burst_time);
-        arr[i].is_completed = false;
     }
 
     sjf();
@@ -64,12 +62,31 @@ int main(void)
 void sjf()
 {
     sort();
-
-    // TODO
-
     int prev_completion = 0;
+
     for (int i = 0; i < n_process; i++)
     {
+        int min_bt = arr[i].burst_time;
+        int min_bt_pos = i;
+        int next_arrival = prev_completion > arr[i].arrival_time ? prev_completion : arr[i].arrival_time;
+        if (i != n_process)
+        {
+            for (int j = i + 1; j < n_process; j++)
+            {
+                if (arr[j].arrival_time > next_arrival)
+                    break;
+                if (arr[j].burst_time < min_bt)
+                {
+                    min_bt_pos = j;
+                    min_bt = arr[j].burst_time;
+                }
+            }
+
+            if (min_bt_pos != i)
+                swap(&arr[i], &arr[min_bt_pos]);
+        }
+        arr[i].completion_time = arr[i].burst_time + next_arrival;
+
         arr[i].turnaround_time = arr[i].completion_time - arr[i].arrival_time;
         arr[i].waiting_time = arr[i].turnaround_time - arr[i].burst_time;
 
